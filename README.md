@@ -28,3 +28,17 @@ Execution of scripts should be automated.
 Files are writing inside Docker container running airflow. To access them check 
 
 astro dev bash
+
+
+To send emails you need to set .env file with these variables:
+AIRFLOW__CORE__TEST_CONNECTION
+AIRFLOW__EMAIL__EMAIL_BACKEND
+AIRFLOW__SMTP__SMTP_HOST
+AIRFLOW__SMTP__START_TLS
+AIRFLOW__SMTP__SMTP_SSL
+AIRFLOW__SMTP__SMTP_USER
+AIRFLOW__SMTP__SMTP_PASSWORD
+AIRFLOW__SMTP__SMTP_PORT
+AIRFLOW__SMTP__SMTP_MAIL_FROM
+
+and replace test@gmail.com in dags.
