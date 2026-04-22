@@ -1,11 +1,6 @@
-import os
-import shutil
 from pathlib import Path
-import xml.etree.ElementTree as ET
 
-import pandas as pd
 from airflow.operators.python import get_current_context
-
 
 def _dag_init():
     context = get_current_context()
@@ -24,7 +19,18 @@ def _silver_transform(
     ingestion_timestamp: str,
     ingestion_dag_run: str,
 ):
+    
+    """
+    Parse NBP XML from bronze layer into a cleaned pandas DataFrame, enrich with metadata,
+    and write/update a partitioned Parquet dataset (deduplicated by currency and date).
+    """
 
+    import os
+    import shutil
+    import xml.etree.ElementTree as ET
+
+    import pandas as pd
+    
     full_path = bronze_path / f"nbp_table_{current_date}.xml"
     xml_data = open(full_path, "rb").read()  # Read file
     root = ET.XML(xml_data)  # Parse XML
@@ -72,7 +78,6 @@ def _silver_transform(
     else:
         existing_df = pd.read_parquet(parquet_file)
         updated_df = pd.concat([existing_df, df], ignore_index=True)
-        # PRINT(f"test: {len(existing_df)}")
 
         updated_df = updated_df.sort_values("ingestion_timestamp", ascending=False)
         updated_df = updated_df.drop_duplicates(
