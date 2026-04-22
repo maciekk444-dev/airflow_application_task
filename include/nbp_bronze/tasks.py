@@ -14,6 +14,12 @@ def _dag_init() -> "str":
 
 
 def get_latest_nbp_table(url_archive: "str", current_date: "str") -> "str":
+    
+    """
+    Fetch archive page, extract available NBP XML filenames with dates,
+    and return the latest file not newer than the given current_date.
+    """
+    
     import re
     import requests
 
@@ -36,6 +42,12 @@ def get_latest_nbp_table(url_archive: "str", current_date: "str") -> "str":
 def _get_file(
     url_archive: "str", url_xml: "str", current_date: "str", raw_path: Path
 ) -> None:
+    
+    """
+    Download the latest NBP XML file (based on archive lookup) and save it
+    to the raw path with a date-based filename.
+    """
+    
     import requests
 
     # get most recent file based on execution date
